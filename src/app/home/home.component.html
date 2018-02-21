@@ -1,0 +1,6 @@
+<div>
+  <apm-dropdown [options]="dogBreeds" placeholder="Выберите породу собаки..." [(ngModel)]="selected" (onChange)="onSelected($event)"></apm-dropdown>
+</div>
+<div>
+  <apm-image [url]="imgUrl" [loading]="loading"></apm-image>
+</div>
