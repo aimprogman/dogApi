@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
+import { Component, OnInit, Input, Output, forwardRef, EventEmitter, SimpleChanges } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector: 'apm-dropdown',
   template: `
-  <select name="{{name}}" (change)="onChange($event)">
-    <option *ngFor="let item of options" value="{{item}}">{{item}}</option>
+  <select name="{{name}}" (change)="onSelectChange()" [(ngModel)]="selectedOption">
+    <option disabled="" [ngValue]="'default'">{{placeholder}}</option>
+    <option *ngFor="let item of options" [ngValue]="item">{{item}}</option>
   <select>`,
   styles: [`
   select{
@@ -19,9 +20,16 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
     padding: 3px;
   }
 
-  `]
+  `],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DropdownComponent),
+      multi: true
+    }
+  ]
 })
-export class DropdownComponent {
+export class DropdownComponent implements ControlValueAccessor {
 
   /**
    *  Input Output Variables
@@ -31,21 +39,43 @@ export class DropdownComponent {
 
   @Input() name: string = "default";
   
-  @Output() selected = new EventEmitter();
+  @Input() placeholder : string;
 
+  @Output() onChange = new EventEmitter();
+
+  /**
+   * used for get and set value of selectbox 
+   */
+  selectedOption: string;
   /**
    * constructor of class
    */
 
-  constructor() { }
+  constructor() {}
+  /**
+   * this function must be called when updated Input variable options, then assigned default value of selectbox
+  */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options']) {
+      this.selectedOption = 'default';
+    }
+  }
+  /**
+   * onchange event of selectbox element, emit to parent component the current value of selectbox 
+   */
+  onSelectChange() {
+    this.onChange.emit(this.selectedOption);
+  }
 
   /**
-   * @param  {} event
-   * onchange event of selectbox element, emit to parent component the value of selectbox 
+   * method of interface ControlValueAccessor, called when ngModel of DropdownComponent updated
    */
-  onChange(event) {
-    let value: string = event.target.value;
-    this.selected.emit(value);
+  writeValue(value) {
+    this.selectedOption = value;
   }
+
+  registerOnChange() { }
+
+  registerOnTouched() { }
 
 }
