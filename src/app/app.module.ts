@@ -5,14 +5,12 @@ import { AppComponent } from './app.component';
 import { DropdownComponent } from './apm-components/dropdown/dropdown.component';
 import { ImageComponent } from './apm-components/image/image.component';
 import { HttpModule } from '@angular/http';
-import { LoadingDirective } from './utils/loading.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     DropdownComponent,
-    ImageComponent,
-    LoadingDirective
+    ImageComponent
   ],
   imports: [
     BrowserModule,
