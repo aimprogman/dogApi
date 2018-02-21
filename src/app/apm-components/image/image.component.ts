@@ -4,7 +4,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   selector: 'apm-image',
   template: `
     <div class="content">
-    <div *ngIf="loading" class="load"></div> 
+    <div *ngIf="_loading" class="load"></div> 
     <img src="{{url}}" (load)="onLoad()">
     </div>   
   `,
@@ -16,8 +16,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
     background: url(assets/loading.gif) center center no-repeat;
   }
   *{
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     border-radius: 5px;
     border: 1px solid black;
   }
@@ -33,7 +33,12 @@ export class ImageComponent implements OnInit {
   @Input() url: string;
 
   /** Variable control the hide or display spinner*/
-  @Input() loading: boolean;
+  _loading: boolean;
+
+  /** Input variable*/
+  @Input('loading') set loading(value:boolean){
+      this._loading = value;
+  }
 
   constructor() { }
 
@@ -41,7 +46,7 @@ export class ImageComponent implements OnInit {
 
   /** After loading image spinner to be hide */
   onLoad(): void {
-    this.loading = false;
+    this._loading = false;
   }
 
 
