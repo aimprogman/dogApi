@@ -5,19 +5,30 @@ import { AppComponent } from './app.component';
 import { DropdownComponent } from './apm-components/dropdown/dropdown.component';
 import { ImageComponent } from './apm-components/image/image.component';
 import { HttpModule } from '@angular/http';
+import { HomeComponent } from './home/home.component';
+import appRoutes from './app.routes';
+import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router';
+import { CustomReuseStrategy } from 'app/app-route-reuse.strategy';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     DropdownComponent,
-    ImageComponent
+    ImageComponent,
+    HomeComponent
   ],
   imports: [
-    BrowserModule,
-    HttpModule
+    BrowserModule, 
+    FormsModule,
+    HttpModule,
+    appRoutes
+
   ],
   providers: [
-    {provide: 'api', useValue: 'https://dog.ceo/api/'},
+    { provide: 'api', useValue: 'https://dog.ceo/api/' },
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
   ],
   bootstrap: [AppComponent]
 })
